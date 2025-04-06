@@ -4,6 +4,10 @@ A lightweight web application that allows users to track their daily mood throug
 
 ---
 
+## 🔗 Live Demo: 👉 https://chrytsin.github.io/mood-tracker/
+
+---
+
 ## 🔍 Project Overview
 
 This application was created as part of a portfolio project to showcase practical front-end development skills. It provides a simple and intuitive interface for users to:
@@ -33,11 +37,6 @@ The project architecture follows a modular structure with separation of concerns
 - Event-driven logic using native JavaScript
 - Lightweight and dependency-free
 
----
-
-## 🔗 Live Demo
-
-👉 [check it live here](https://chrytsin.github.io/mood-tracker/)  
 ---
 
 ## 📦 Installation & Usage
