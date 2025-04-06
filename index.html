@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Mood Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>📅 Καταγραφή Διάθεσης</h1>
+  
+  <div class="form-container">
+    <label for="mood">Διάλεξε διάθεση:</label>
+    <select id="mood">
+      <option value="😀">Χαρούμενος/η</option>
+      <option value="😴">Κουρασμένος/η</option>
+      <option value="😰">Στρεσαρισμένος/η</option>
+    </select>
+
+    <label for="note">Σημείωση:</label>
+    <input type="text" id="note" placeholder="Πώς αισθάνεσαι σήμερα;">
+
+    <button id="saveBtn">Αποθήκευση</button>
+  </div>
+
+  <h2>📋 Οι διαθέσεις σου:</h2>
+  <ul id="entries"></ul>
+
+  <script src="script.js"></script>
+</body>
+</html>
