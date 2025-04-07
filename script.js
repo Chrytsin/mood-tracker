@@ -3,43 +3,43 @@ const moodSelect = document.getElementById('mood');
 const noteInput = document.getElementById('note');
 const entriesList = document.getElementById('entries');
 
-// Φόρτωσε τις υπάρχουσες καταχωρήσεις από το localStorage όταν ανοίξει η σελίδα
+// 1. EVENT: Φόρτωσε τις υπάρχουσες καταχωρήσεις από το localStorage όταν ανοίξει η σελίδα
 window.addEventListener('DOMContentLoaded', loadEntries);
 
-// Κάνε αποθήκευση νέας καταχώρησης όταν γίνει click στο κουμπί "Save"
+// 2. EVENT: Αποθήκευση νέας καταχώρησης όταν γίνει click στο κουμπί "Save"
 saveBtn.addEventListener('click', () => {
   const mood = moodSelect.value;
   const note = noteInput.value.trim();
 
-  // Έλεγχος αν έχει γραφτεί σημείωση
+  // 2.1 Έλεγχος αν έχει γραφτεί σημείωση
   if (!note) {
     alert('Γράψε μια σημείωση!');
     return;
   }
   
-  // Δημιουργία αντικειμένου για την καταχώρηση
+  // 2.2 Δημιουργία αντικειμένου για την καταχώρηση
   const newEntry = {
     mood,
     note,
     date: new Date().toLocaleString() // ημερομηνία και ώρα καταγραφής
   };
 
-  // Δημιουργία του li στο DOM
+  // 2.3 Δημιουργία του li στο DOM
   const li = createListItem(newEntry);
   entriesList.appendChild(li);
 
-  // Καθάρισε το input πεδίο
+  // 2.4 Καθάρισε το input πεδίο
   noteInput.value = '';
 
-  // Φέρε τις υπάρχουσες καταχωρήσεις από το localStorage ή ένα άδειο array
+  // 2.5 Φέρε τις υπάρχουσες καταχωρήσεις από το localStorage ή ένα άδειο array
   const existingEntries = JSON.parse(localStorage.getItem('entries')) || [];
 
-  // Πρόσθεσε τη νέα καταχώρηση και αποθήκευσέ την
+  // 2.6 Πρόσθεσε τη νέα καταχώρηση και αποθήκευσέ την
   existingEntries.push(newEntry);
   localStorage.setItem('entries', JSON.stringify(existingEntries));
 });
 
-// Συνάρτηση για τη δημιουργία ενός li στοιχείου
+// 3. FUNCTION: Δημιουργία ενός li στοιχείου
 function createListItem(entry) {
   const li = document.createElement('li');
   li.innerHTML = `
@@ -47,7 +47,7 @@ function createListItem(entry) {
     <button class="deleteBtn">Διαγραφή ❌</button>
   `;
 
-  // Όταν πατηθεί το deleteBtn αφαίρεσε το στοιχείο και από το DOM και από το localStorage
+  // 3.1 EVENT: Όταν πατηθεί το deleteBtn αφαίρεσε το στοιχείο και από το DOM και από το localStorage
   li.querySelector('.deleteBtn').addEventListener('click', () => {
     li.remove();
     deleteEntry(entry);
@@ -56,7 +56,7 @@ function createListItem(entry) {
   return li;
 }
 
-// Συνάρτηση για την εμφάνιση των καταχωρήσεων κατά τη φόρτωση της σελίδας
+// 4. FUNCTION: Εμφάνιση των καταχωρήσεων κατά τη φόρτωση της σελίδας
 function loadEntries() {
   const savedEntries = JSON.parse(localStorage.getItem('entries')) || [];
 
@@ -66,16 +66,18 @@ function loadEntries() {
   });
 }
 
-// Συνάρτηση για διαγραφή καταχώρησης από το localStorage
+// 5. FUNCTION: Διαγραφή καταχώρησης από το localStorage
 function deleteEntry(entryToDelete) {
+  // 5.1 Αν υπάρχει λίστα με καταχωρήσεις στο localStorage μετέτρεψε την σε array, αλλιώς ξεκίνα με κενό array
   let entries = JSON.parse(localStorage.getItem('entries')) || [];
 
-  // Φίλτραρε τις εγγραφές ώστε να κρατήσεις μόνο τις διαφορετικές από αυτή που θέλεις να διαγράψεις
+  // 5.2 Φίλτραρε τις εγγραφές ώστε να κρατήσεις μόνο τις διαφορετικές από αυτή που θέλεις να διαγράψεις
   entries = entries.filter(entry => {
     return !(entry.mood === entryToDelete.mood &&
              entry.note === entryToDelete.note &&
              entry.date === entryToDelete.date);
   });
 
+  // 5.3 Μετατροπή arrays σε strings
   localStorage.setItem('entries', JSON.stringify(entries));
 }
