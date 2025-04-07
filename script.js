@@ -21,8 +21,15 @@ saveBtn.addEventListener('click', () => {
   entriesList.appendChild(li);
   noteInput.value = '';
 
-  // Delete entry when clicking ❌
+  // EVENT: Delete entry when clicking deleteBtn
   li.querySelector('.deleteBtn').addEventListener('click', () => {
     li.remove();
   });
+
+  //Αποθήκευση καταχωρήσεων στο localStorage
+  const newEntry = { mood, note, date: new Date().toLocaleString() };
+  const existingEntries = JSON.parse(localStorage.getItem('entries')) || [];
+  existingEntries.push(newEntry);
+  localStorage.setItem('entries', JSON.stringify(existingEntries));
+
 });
