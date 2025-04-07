@@ -3,67 +3,79 @@ const moodSelect = document.getElementById('mood');
 const noteInput = document.getElementById('note');
 const entriesList = document.getElementById('entries');
 
+// Φόρτωσε τις υπάρχουσες καταχωρήσεις από το localStorage όταν ανοίξει η σελίδα
+window.addEventListener('DOMContentLoaded', loadEntries);
+
+// Κάνε αποθήκευση νέας καταχώρησης όταν γίνει click στο κουμπί "Save"
 saveBtn.addEventListener('click', () => {
   const mood = moodSelect.value;
   const note = noteInput.value.trim();
 
+  // Έλεγχος αν έχει γραφτεί σημείωση
   if (!note) {
     alert('Γράψε μια σημείωση!');
     return;
   }
+  
+  // Δημιουργία αντικειμένου για την καταχώρηση
+  const newEntry = {
+    mood,
+    note,
+    date: new Date().toLocaleString() // ημερομηνία και ώρα καταγραφής
+  };
 
-  const li = document.createElement('li');
-  li.innerHTML = `
-    <span>${mood} ${note}</span>
-    <button class="deleteBtn">Διαγραφή ❌</button>
-  `;
-
+  // Δημιουργία του li στο DOM
+  const li = createListItem(newEntry);
   entriesList.appendChild(li);
+
+  // Καθάρισε το input πεδίο
   noteInput.value = '';
 
-  // EVENT: Delete entry when clicking deleteBtn
-  li.querySelector('.deleteBtn').addEventListener('click', () => {
-    li.remove();
-  });
-
-  //Αποθήκευση καταχωρήσεων στο localStorage
-  const newEntry = { mood, note, date: new Date().toLocaleString() };
+  // Φέρε τις υπάρχουσες καταχωρήσεις από το localStorage ή ένα άδειο array
   const existingEntries = JSON.parse(localStorage.getItem('entries')) || [];
+
+  // Πρόσθεσε τη νέα καταχώρηση και αποθήκευσέ την
   existingEntries.push(newEntry);
   localStorage.setItem('entries', JSON.stringify(existingEntries));
+});
 
-  //Εμφάνιση αποθηκευμένων καταχωρήσεων όταν φορτώνει η σελίδα
-  window.addEventListener('DOMContentLoaded', () => {
-    function loadEntries() {
+// Συνάρτηση για τη δημιουργία ενός li στοιχείου
+function createListItem(entry) {
+  const li = document.createElement('li');
+  li.innerHTML = `
+    <span>${entry.mood} ${entry.note} <small>${entry.date}</small></span>
+    <button class="deleteBtn">❌</button>
+  `;
+
+  // Όταν πατηθεί το ❌, αφαίρεσε το στοιχείο και από το DOM και από το localStorage
+  li.querySelector('.deleteBtn').addEventListener('click', () => {
+    li.remove();
+    deleteEntry(entry);
+  });
+
+  return li;
+}
+
+// Συνάρτηση για την εμφάνιση των καταχωρήσεων κατά τη φόρτωση της σελίδας
+function loadEntries() {
   const savedEntries = JSON.parse(localStorage.getItem('entries')) || [];
 
   savedEntries.forEach(entry => {
-    const li = document.createElement('li');
-    li.innerHTML = `
-      <span>${entry.mood} ${entry.note} <small>${entry.date}</small></span>
-      <button class="deleteBtn">❌</button>
-    `;
+    const li = createListItem(entry);
     entriesList.appendChild(li);
-
-    li.querySelector('.deleteBtn').addEventListener('click', () => {
-      li.remove();
-      deleteEntry(entry); // Θα την ορίσουμε αμέσως μετά
-    });
   });
 }
 
-    //Διαγραφή από localStorage
-    function deleteEntry(entryToDelete) {
+// Συνάρτηση για διαγραφή καταχώρησης από το localStorage
+function deleteEntry(entryToDelete) {
   let entries = JSON.parse(localStorage.getItem('entries')) || [];
+
+  // Φίλτραρε τις εγγραφές ώστε να κρατήσεις μόνο τις διαφορετικές από αυτή που θέλεις να διαγράψεις
   entries = entries.filter(entry => {
-    return !(entry.mood === entryToDelete.mood && entry.note === entryToDelete.note && entry.date === entryToDelete.date);
+    return !(entry.mood === entryToDelete.mood &&
+             entry.note === entryToDelete.note &&
+             entry.date === entryToDelete.date);
   });
+
   localStorage.setItem('entries', JSON.stringify(entries));
 }
-
-  });
-  
-  //Κάλεσε το loadEntries() όταν φορτώνει η σελίδα
-  window.addEventListener('DOMContentLoaded', loadEntries);
-
-});
