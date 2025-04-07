@@ -32,4 +32,38 @@ saveBtn.addEventListener('click', () => {
   existingEntries.push(newEntry);
   localStorage.setItem('entries', JSON.stringify(existingEntries));
 
+  //Εμφάνιση αποθηκευμένων καταχωρήσεων όταν φορτώνει η σελίδα
+  window.addEventListener('DOMContentLoaded', () => {
+    function loadEntries() {
+  const savedEntries = JSON.parse(localStorage.getItem('entries')) || [];
+
+  savedEntries.forEach(entry => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <span>${entry.mood} ${entry.note} <small>${entry.date}</small></span>
+      <button class="deleteBtn">❌</button>
+    `;
+    entriesList.appendChild(li);
+
+    li.querySelector('.deleteBtn').addEventListener('click', () => {
+      li.remove();
+      deleteEntry(entry); // Θα την ορίσουμε αμέσως μετά
+    });
+  });
+}
+
+    //Διαγραφή από localStorage
+    function deleteEntry(entryToDelete) {
+  let entries = JSON.parse(localStorage.getItem('entries')) || [];
+  entries = entries.filter(entry => {
+    return !(entry.mood === entryToDelete.mood && entry.note === entryToDelete.note && entry.date === entryToDelete.date);
+  });
+  localStorage.setItem('entries', JSON.stringify(entries));
+}
+
+  });
+  
+  //Κάλεσε το loadEntries() όταν φορτώνει η σελίδα
+  window.addEventListener('DOMContentLoaded', loadEntries);
+
 });
