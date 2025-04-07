@@ -44,10 +44,10 @@ function createListItem(entry) {
   const li = document.createElement('li');
   li.innerHTML = `
     <span>${entry.mood} ${entry.note} <small>${entry.date}</small></span>
-    <button class="deleteBtn">❌</button>
+    <button class="deleteBtn">Διαγραφή ❌</button>
   `;
 
-  // Όταν πατηθεί το ❌, αφαίρεσε το στοιχείο και από το DOM και από το localStorage
+  // Όταν πατηθεί το deleteBtn αφαίρεσε το στοιχείο και από το DOM και από το localStorage
   li.querySelector('.deleteBtn').addEventListener('click', () => {
     li.remove();
     deleteEntry(entry);
