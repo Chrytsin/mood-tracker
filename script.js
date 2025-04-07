@@ -15,7 +15,7 @@ saveBtn.addEventListener('click', () => {
   const li = document.createElement('li');
   li.innerHTML = `
     <span>${mood} ${note}</span>
-    <button class="deleteBtn">❌</button>
+    <button class="deleteBtn">Διαγραφή ❌</button>
   `;
 
   entriesList.appendChild(li);
